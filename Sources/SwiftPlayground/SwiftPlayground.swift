@@ -1,20 +1,30 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+func menuChoice() {
+    print(
+        """
+            ==== Egg Shop ====
+        1. Add eggs
+        2. Sell eggs
+        3. Show current stock
+        4. Show total eggs sold
+        5. Exit
+        Choose an option:
+        """)
+
+
+}
+
 @main
 struct SwiftPlayground {
     static func main() {
-        print("enter room length")
-        if let userInput = readLine(), let roomlength = Double(userInput) {
-print("enter room width")
-        if let userInput = readLine(), let roomwidth = Double(userInput) {
+menuChoice()
+if let input = readLine(), let menuOption = Int(input) {
+if menuOption == 1 {
+    
+}
+}
 
-        let roomlength = 6.0
-        let roomwidth = 4.5
-        let roomheight = 2.7
-
-        let roomarea = roomlength * roomwidth
-
-        print("Room Area: \(roomarea) m²")
     }
 }
