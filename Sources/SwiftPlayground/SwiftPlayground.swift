@@ -7,7 +7,7 @@ let maxEggs = 999
 func menuChoice() -> Int {
     print(
         """
-        \n
+
             ==== Egg Shop ====
         1. Add eggs
         2. Sell eggs
@@ -54,7 +54,11 @@ func addEggs(currentStock: Int, amount: Int) -> Int {
     }
 
 }
-
+///checks if there is enough eggs in stock to fulfill the sell request then sells eggs from stock count
+/// parameters:
+/// currentStock - eggs in stock
+/// amount - amount of eggs user requests to be sold
+/// returns the new stock count 
 func sellEggs(currentStock: Int, amount: Int) -> Int {
     if currentStock - amount < 0 {
         print("you can not sell more eggs that you have in stock")
@@ -66,6 +70,14 @@ func sellEggs(currentStock: Int, amount: Int) -> Int {
         return currentStock - amount
     }
 }
+/// updates how many eggs have been sold in total
+/// parameters:
+/// currentlySold - how many eggs have already been sold 
+/// amount - amount of eggs that are jest been sold
+/// returns the total eggs sold
+func updateSoldCount(currentlySold: Int, amount: Int) -> Int {
+    return currentlySold + amount
+}
 
 @main
 struct SwiftPlayground {
@@ -73,9 +85,10 @@ struct SwiftPlayground {
 
         var eggsInStock = 0
         var eggsSold = 0
+
         while true {
-            //switch calls specific func based on what number is selected in menu
             let userChoice = menuChoice()
+            //switch calls specific functions based on what number is selected in menu
             switch userChoice {
             case 1:
                 print("How many eggs would you like to add?")
@@ -83,13 +96,29 @@ struct SwiftPlayground {
 
             case 2:
                 print("How many eggs would you like to sell?")
-                eggsInStock = sellEggs(currentStock: eggsInStock, amount: intImputValidator())
+                let previousStock = eggsInStock
+                let amountToSell = intImputValidator()
+                eggsInStock = sellEggs(currentStock: eggsInStock, amount: amountToSell)
+
+                // checks if any eggs were sold
+                // if were sold then records in the total amount sold
+                if eggsInStock < previousStock {
+                    eggsSold = updateSoldCount(currentlySold: eggsSold, amount: amountToSell)
+                }
 
             case 3:
                 print("You currently have \(eggsInStock) eggs in stock.")
 
+            case 4:
+                print("you have sold \(eggsSold) eggs")
+
+            case 5:
+                print("goodbye")
+                return
+
             default:
-                print()
+                print("error")
+                break
 
             }
 
