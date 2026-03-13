@@ -1,20 +1,20 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+
+/// Parameter:
+/// - board: The 2D grid to display.
+func printBoard(_ board: [[String]]){
+    print(board)
+}
+
 @main
 struct SwiftPlayground {
     static func main() {
-        print("enter room length")
-        if let userInput = readLine(), let roomlength = Double(userInput) {
-print("enter room width")
-        if let userInput = readLine(), let roomwidth = Double(userInput) {
+        let size = 6
+var ocean = Array(repeating: Array(repeating: "~", count: size), count: size)
+var guesses = Array(repeating: Array(repeating: "~", count: size), count: size)
 
-        let roomlength = 6.0
-        let roomwidth = 4.5
-        let roomheight = 2.7
-
-        let roomarea = roomlength * roomwidth
-
-        print("Room Area: \(roomarea) m²")
+printBoard(ocean)
     }
 }
