@@ -14,8 +14,10 @@ func average(of temperature: [[Int]], row: Int) -> Double {
 
 // task 3
 func columnTotal(in table2: [[Int]], column: Int) {
-for number in table2 {
+    var counter = 0
     
+for number in table2 {
+
 }
 }
 
@@ -32,7 +34,7 @@ struct SwiftPlayground {
 
         print(
             """
-
+            \(temperature[0])
             \(temperature[1] [2])
             \(temperature[2] [0])
             \(average(of: temperature, row: 1))
