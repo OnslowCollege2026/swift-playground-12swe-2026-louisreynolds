@@ -78,7 +78,7 @@ struct SwiftPlayground {
             """)
         printBoard(guesses)
 
-var progress = 1
+var progress = 0
 
         while progress < maximumGuesses {
             print("Please guess a row number 1-\(size)")
