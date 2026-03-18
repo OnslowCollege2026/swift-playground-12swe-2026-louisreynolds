@@ -90,6 +90,7 @@ var progress = 1
             guesses = processGuess(row: row, col: column, ocean: ocean, guesses: guesses)
 
             printBoard(guesses)
+            progress += 1
         }
     }
 }
