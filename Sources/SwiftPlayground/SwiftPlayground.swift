@@ -31,8 +31,24 @@ func guessValidator(size: Int) -> Int {
 ///
 /// Returns: The updated guesses grid after the guess is applied.
 func processGuess(row: Int, col: Int, ocean: [[String]], guesses: [[String]]) -> [[String]] {
+    var updatedGuesses = guesses 
 
-}
+    if guesses[row][col] != "~" {
+        print("You have already guesses that spot. Please guess a different spot.")
+        return updatedGuesses
+    }
+
+    if ocean[row][col] == "S" {
+        print("Hit!")
+        updatedGuesses[row][col] = "X"
+        return updatedGuesses
+    } else {
+        print("Miss!")
+        updatedGuesses[row][col] = "0"
+        return updatedGuesses
+    }
+    }
+    
 
 @main
 struct SwiftPlayground {
@@ -66,9 +82,11 @@ struct SwiftPlayground {
             let row = guessValidator(size: size) - turnGuessInto2DArrayCall 
 
             print("Please guess a column number 1-\(size)")
-            let column = guessValidator(size: size)
+            let column = guessValidator(size: size) - turnGuessInto2DArrayCall
 
-            guesses = pro
+            guesses = processGuess(row: row, col: column, ocean: ocean, guesses: guesses)
+
+            printBoard(guesses)
         }
     }
 }
