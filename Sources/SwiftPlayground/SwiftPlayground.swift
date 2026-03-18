@@ -77,7 +77,7 @@ struct SwiftPlayground {
             """)
         printBoard(guesses)
 
-        while true{
+        for i in 1...5 {
             print("Please guess a row number 1-\(size)")
             let row = guessValidator(size: size) - turnGuessInto2DArrayCall 
 
