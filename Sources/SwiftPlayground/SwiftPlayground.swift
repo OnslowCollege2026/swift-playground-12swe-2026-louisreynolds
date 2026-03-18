@@ -81,7 +81,7 @@ struct SwiftPlayground {
 var progress = 0
 
         while progress < maximumGuesses {
-            let 
+        
             print("Please guess a row number 1-\(size)")
             let row = guessValidator(size: size) - turnGuessInto2DArrayCall 
 
