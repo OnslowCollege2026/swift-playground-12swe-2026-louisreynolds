@@ -92,7 +92,7 @@ struct SwiftPlayground {
         //randomly picks the position of the ships
         var shipsPlaced = 0
 
-    while shipsPlaced < amountOfShips {
+        while shipsPlaced < amountOfShips {
             let row = Int.random(in: 0...size - 1)
             let col = Int.random(in: 0...size - 1)
 
@@ -101,7 +101,7 @@ struct SwiftPlayground {
                 shipsPlaced += 1
             }
         }
-printBoard(ocean)
+
         print(
             """
             This is battle ships. You will be asked to guess where the battle ship are on the grid.
@@ -138,12 +138,10 @@ printBoard(ocean)
                 guesses = newGuesses
             }
 
-
-            //checks if player has won the game before using all their guesses 
+            //checks if player has won the game before using all their guesses
             if shipsRemaining(ocean: ocean, guesses: guesses) == 0 {
                 break
             }
-
 
             print("There are \(shipsLeft) ships remaining.")
             print("You have \(maximumGuesses - progress) guesses left. \n")
