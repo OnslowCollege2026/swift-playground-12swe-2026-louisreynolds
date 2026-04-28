@@ -1,7 +1,7 @@
 let maxKumara: Double = 50
 let kumaraPricePerKG: Double = 3.0
 let minSale: Double = 0.1
-let maxBags = 5000
+let maxBags: Int = 5000
 let maxWeightInBags: Double = 5.0
 let bagPrice: Double = 0.2
 
@@ -63,11 +63,47 @@ func addKumara(currentStock: Double, amount: Double) -> Double {
 
 }
 
+func sellKumara(currentStock: Double, saleHistory: inout [[Double]]) -> Double {
+    print ("""
+    How much kumara would you like to sell? 
+    The maxium kumara to can sell is \(currentStock)Kg")
+    kumara costs $\(kumaraPricePerKG) per Kg
+    """)
+    while true {
+    let amountOfKumaraToSell = intImputValidator()
+    if amountOfKumaraToSell < minSale {
+        print("The minimum amount of kumara to purchase is \(minSale)Kg ")
+        } else if amountOfKumaraToSell > currentStock {
+        print("Insuffienct stock, miximum amount of kumara to currently purchase is \(currentStock)Kg")
+        }
+        else {
+        break
+        }
+    }
+
+        //ask of number of bags to be purchased 
+        print ("""
+        How many bags would you like to sell? 
+        Maximum of \(maxWeightInBags)Kg of kumara per bag
+        There are are a maximum of \(maxBags) bags the can be purchased in one transaction. 
+        The price of a bag is $\(bagPrice)
+        """)
+        while true {
+            let amountOfBagsToSell = intImputValidator()
+            if amountOfBagsToSell <  Double(maxBags) {}
+        }
+    }
+    
+
+
+
+
 @main
 struct SwiftPlayground {
     static func main() {
 
         var kumaraInStock: Double = 0
+        var saleHistory: [[Double]] = []
 
         // looks at what user selected from the menu and calls that part of the program
         while true {
@@ -78,7 +114,7 @@ struct SwiftPlayground {
                 kumaraInStock = addKumara(currentStock: kumaraInStock, amount: intImputValidator())
             case 2:
                 print("How much kumara would you like to sell?")
-                
+
             default:
                 break
 
