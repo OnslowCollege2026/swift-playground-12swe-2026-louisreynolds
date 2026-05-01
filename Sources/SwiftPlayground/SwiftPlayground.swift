@@ -1,5 +1,6 @@
 import Foundation
 
+// starting parameters 
 let maxKumara: Double = 50
 let kumaraPricePerKG: Double = 3.0
 let minKumara: Double = 0.1
@@ -41,35 +42,46 @@ func ImputValidator() -> Double {
         if let userchoice = Double(userImput), userchoice > 0 {
             return userchoice
         } else {
-            print("Invald response, please try again")
+            print("Invalid response, please try again")
         }
     }
 }
 ///checks that total stock doesn't exeed 50kg when new stock is added then add the kumara to the current stock
 /// parameters
-/// kumara in stock
-/// amount of kumara user is adding to stock
+///currentStock - kumara in stock
+///amount - amount of kumara user is adding to stock
 /// returns new number of kumara in stock or same stock if stock was going to exeed 50kg with the new kumara added
 
 func addKumara(currentStock: Double, amount: Double) -> Double {
-    if currentStock + amount <= maxKumara {
-        print("success! You now have \(currentStock + amount) kg of kumara")
-        return currentStock + amount
-    }else if amount < 0.1 {
+    if amount < minKumara {
         print("The minimum amount of kumara to add to stock is \(minKumara)Kg")
         return currentStock
-    } else {
+    } else if currentStock + amount > maxKumara {
         print("You can not have more than 50kg of kumara in stock.")
-        print("The maximum amount of kumara you can add to the current stock is \(maxKumara-currentStock)kg")
+        print(
+            "The maximum amount of kumara you can add to the current stock is \(maxKumara-currentStock)kg"
+        )
         return currentStock
+    } else {
+        print("success! You now have \(currentStock + amount) kg of kumara")
+        return currentStock + amount
     }
 
 }
+///ask how much kumara to sell then checks if that amount is in stock then asks how many bags to sell and checks if it is suffient number of bags for the amount of kumara sold. It documents it in sales history then processes order
+/// parameters 
+/// currentStock - kumara in stock
+/// salesHistoryKumara - array of all kumara sales 
+/// salesHistoryBags- array of all bags sales
+/// saleHistoryTotal - array of total for all sales
+/// returns: updated kumara stock 
+func sellKumara(
+    currentStock: Double, salesHistoryKumara: inout [Double], salesHistoryBags: inout [Int],
+    salesHistoryTotal: inout [Double]
+) -> Double {
 
-func sellKumara(currentStock: Double, saleHistory: inout [[Double]]) -> Double {
-
-let amountOfKumaraToSell: Double = 0
-let amountOfBagsToSell: Int = 0
+    var amountOfKumaraToSell: Double = 0
+    var amountOfBagsToSell: Int = 0
 
     print(
         """
@@ -78,7 +90,7 @@ let amountOfBagsToSell: Int = 0
         kumara costs $\(kumaraPricePerKG) per Kg
         """)
     while true {
-        let amountOfKumaraToSell = ImputValidator()
+        amountOfKumaraToSell = ImputValidator()
         if amountOfKumaraToSell < minKumara {
             print("The minimum amount of kumara to purchase is \(minKumara)Kg ")
         } else if amountOfKumaraToSell > currentStock {
@@ -90,7 +102,6 @@ let amountOfBagsToSell: Int = 0
         }
     }
 
-
     //ask of number of bags to be purchased
     print(
         """
@@ -100,40 +111,50 @@ let amountOfBagsToSell: Int = 0
         The price of a bag is $\(bagPrice)
         """)
 
-
-
-        //gets a responce from user for a amount of bags being sold
-        //can't use inputValidator as an Int has to be returned 
-        while true {
-            let bags = readLine()!
-             //checks if user has asked for enough bags for the amount of kumara they're buying
-            if let amountOfBagsToSell = Int(bags), amountOfBagsToSell > 0,  amountOfBagsToSell > Int((amountOfKumaraToSell / maxWeightInBags).rounded(.up)) {
-                break 
-            } else {
-                print("Invalid responce, Please enter the amount of bags you want")
-                print("You must purchase at least \(Int((amountOfKumaraToSell / maxWeightInBags).rounded(.up))) bags")
-            } 
+    //gets a responce from user for a amount of bags being sold
+    //can't use inputValidator as an Int has to be returned
+    while true {
+        let bags = readLine()!
+        //checks if user has asked for enough bags for the amount of kumara they're buying
+        if let bagsInWhileLoop = Int(bags), bagsInWhileLoop > 0, bagsInWhileLoop <= 5000,
+            bagsInWhileLoop >= Int((amountOfKumaraToSell / maxWeightInBags).rounded(.up))
+        {
+            amountOfBagsToSell = bagsInWhileLoop
+            break
+        } else {
+            print("Invalid responce, Please enter the amount of bags you want")
+            print(
+                "You must purchase at least \(Int((amountOfKumaraToSell / maxWeightInBags).rounded(.up))) bags. Maximum amount of bags is \(maxBags)"
+            )
         }
-        print("""
+    }
+
+    // sales history
+    let total = kumaraPricePerKG * amountOfKumaraToSell + bagPrice * Double(amountOfBagsToSell)
+    salesHistoryKumara.append(amountOfKumaraToSell)
+    salesHistoryBags.append(amountOfBagsToSell)
+    salesHistoryTotal.append(total)
+
+    print(
+        """
         Success!
         Customer has purchased \(amountOfKumaraToSell)Kg's of kumara at $\(kumaraPricePerKG) per Kg, totaling $\(amountOfKumaraToSell * kumaraPricePerKG)
         Customer has purchased \(amountOfBagsToSell) bags at $\(bagPrice), per bag totaling $\(Double(amountOfBagsToSell) * bagPrice)
-        The grand total for this transaction is $\(amountOfKumaraToSell * kumaraPricePerKG + Double(amountOfBagsToSell) * bagPrice)
+        The grand total for this transaction is $\(total)
         """)
 
-        return currentStock - amountOfKumaraToSell 
-    
-        }
+    return currentStock - amountOfKumaraToSell
 
-
-
+}
 
 @main
 struct SwiftPlayground {
     static func main() {
 
         var kumaraInStock: Double = 0
-        var saleHistory: [[Double]] = []
+        var salesHistoryKumara: [Double] = []
+        var salesHistoryBags: [Int] = []
+        var salesHistoryTotal: [Double] = []
 
         // looks at what user selected from the menu and calls that part of the program
         while true {
@@ -143,7 +164,21 @@ struct SwiftPlayground {
                 print("How many kg of kumara would you like to add?")
                 kumaraInStock = addKumara(currentStock: kumaraInStock, amount: ImputValidator())
             case 2:
-                kumaraInStock = sellKumara(currentStock: kumaraInStock, saleHistory: &saleHistory)
+                if kumaraInStock >= 0.1 {
+                    kumaraInStock = sellKumara(
+                        currentStock: kumaraInStock, salesHistoryKumara: &salesHistoryKumara,
+                        salesHistoryBags: &salesHistoryBags, salesHistoryTotal: &salesHistoryTotal)
+                } else {
+                    print(
+                        "Not enough kumara in stock to sell, please add more kumara to stock before selling"
+                    )
+                }
+            case 3:
+                print("The current kumara stock is \(kumaraInStock)Kg")
+            case 4:
+print(salesHistoryKumara)
+print(salesHistoryBags)
+print(salesHistoryTotal)
 
             default:
                 break
