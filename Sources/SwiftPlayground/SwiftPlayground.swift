@@ -1,6 +1,6 @@
 import Foundation
 
-// starting parameters 
+// starting parameters
 let maxKumara: Double = 50
 let kumaraPricePerKG: Double = 3.0
 let minKumara: Double = 0.1
@@ -57,7 +57,7 @@ func addKumara(currentStock: Double, amount: Double) -> Double {
         print("The minimum amount of kumara to add to stock is \(minKumara)Kg")
         return currentStock
     } else if currentStock + amount > maxKumara {
-        print("You can not have more than 50kg of kumara in stock.")
+        print("You can not have more than \(maxKumara)kg of kumara in stock.")
         print(
             "The maximum amount of kumara you can add to the current stock is \(maxKumara-currentStock)kg"
         )
@@ -69,12 +69,12 @@ func addKumara(currentStock: Double, amount: Double) -> Double {
 
 }
 ///ask how much kumara to sell then checks if that amount is in stock then asks how many bags to sell and checks if it is suffient number of bags for the amount of kumara sold. It documents it in sales history then processes order
-/// parameters 
+/// parameters
 /// currentStock - kumara in stock
-/// salesHistoryKumara - array of all kumara sales 
+/// salesHistoryKumara - array of all kumara sales
 /// salesHistoryBags- array of all bags sales
 /// saleHistoryTotal - array of total for all sales
-/// returns: updated kumara stock 
+/// returns: updated kumara stock
 func sellKumara(
     currentStock: Double, salesHistoryKumara: inout [Double], salesHistoryBags: inout [Int],
     salesHistoryTotal: inout [Double]
@@ -86,16 +86,16 @@ func sellKumara(
     print(
         """
         How much kumara would you like to sell? 
-        The maxium kumara to can sell is \(currentStock)Kg")
+        The maximum kumara you can sell is \(currentStock)Kg")
         kumara costs $\(kumaraPricePerKG) per Kg
         """)
     while true {
         amountOfKumaraToSell = ImputValidator()
         if amountOfKumaraToSell < minKumara {
-            print("The minimum amount of kumara to purchase is \(minKumara)Kg ")
+            print("The minimum amount of kumara you can sell is \(minKumara)Kg ")
         } else if amountOfKumaraToSell > currentStock {
             print(
-                "Insuffienct stock, miximum amount of kumara to currently purchase is \(currentStock)Kg"
+                "Insuffienct stock, maximum amount of kumara you can sell is \(currentStock)Kg"
             )
         } else {
             break
@@ -122,9 +122,9 @@ func sellKumara(
             amountOfBagsToSell = bagsInWhileLoop
             break
         } else {
-            print("Invalid responce, Please enter the amount of bags you want")
+            print("Invalid responce, Please enter the amount of bags you want to sell")
             print(
-                "You must purchase at least \(Int((amountOfKumaraToSell / maxWeightInBags).rounded(.up))) bags. Maximum amount of bags is \(maxBags)"
+                "You must sell at least \(Int((amountOfKumaraToSell / maxWeightInBags).rounded(.up))) bags. Maximum amount of bags is \(maxBags)"
             )
         }
     }
@@ -146,11 +146,93 @@ func sellKumara(
     return currentStock - amountOfKumaraToSell
 
 }
+///displays the sales records and goes stright back to menu if no sales have been made yet
+/// parameters
+/// salesHistoryKumara - history of kumara sales
+/// salesHistoryBags -history of bag sales
+/// saleHistoryTotal - history of total transaction of sales
+func showSalesHistory(
+    salesHistoryKumara: [Double], salesHistoryBags: [Int], saleHistoryTotal: [Double]
+) {
+    //returns to menu if theres no sales
+    if saleHistoryTotal.isEmpty {
+        print("No sales yet")
+        return
+    } else {
+        print("\n Sales histoy")
+        //prints out every sale
+        for i in 0..<saleHistoryTotal.count {
+            print(
+                """
+                Sale: \(i + 1)
+                    Kumara sold: \(salesHistoryKumara[i])Kg
+                    bags sold: \(salesHistoryBags[i])
+                    total: $\(saleHistoryTotal[i])
+                """)
+        }
+        return
+    }
+}
+///works out and diplays the summary info
+/// parameters
+/// salesHistoryKumara - history of kumara sales
+/// salesHistoryBags -history of bag sales
+/// saleHistoryTotal - history of total transaction of sales
+func showSummaryInfo(
+    salesHistoryKumara: [Double], salesHistoryBags: [Int], salesHistoryTotal: [Double]
+) {
+    //returns to menu if theres no sales
+    if salesHistoryKumara.isEmpty {
+        print("No sales yet")
+        return
+    } else {
+        //totals the kumara from all sales
+        var totalKumara: Double = 0
+        for kumara in salesHistoryKumara {
+            totalKumara += kumara
+        }
 
+        //totals the bags from all sales
+        var totalbags: Int = 0
+        for bags in salesHistoryBags {
+            totalbags += bags
+        }
+
+        //totals the revenue from all sales
+        var totalRevenue: Double = 0
+        for revenue in salesHistoryTotal {
+            totalRevenue += revenue
+        }
+
+        //works out the average of all summary info
+        let averageKumaraSold = totalKumara / Double(salesHistoryKumara.count)
+        let avergeBagsold = Double(totalbags) / Double(salesHistoryBags.count)
+        let averageKumaraPerBag = totalKumara / Double(totalbags)
+        let averageCostPerBag = totalRevenue / Double(totalbags)
+        let averageCostPerOrder = totalRevenue / Double(salesHistoryTotal.count)
+
+        print(
+            """
+
+            === Summary ===
+
+            Total kumara sold: \(totalKumara)Kg
+            Total bags sold: \(totalbags)
+            Total Revenue generated: $\(totalRevenue)
+            Average kumara sold per transaction: \(averageKumaraSold)Kg
+            Average Bags sold per transation: \(avergeBagsold)
+            Average Kumara per bag: \(averageKumaraPerBag)Kg
+            Average Revenue per bag: $\(averageCostPerBag)
+            Average Revenue per transaction: $\(averageCostPerOrder)
+            """)
+        return
+    }
+}
 @main
 struct SwiftPlayground {
     static func main() {
 
+        //variable declaration
         var kumaraInStock: Double = 0
         var salesHistoryKumara: [Double] = []
         var salesHistoryBags: [Int] = []
@@ -164,7 +246,8 @@ struct SwiftPlayground {
                 print("How many kg of kumara would you like to add?")
                 kumaraInStock = addKumara(currentStock: kumaraInStock, amount: ImputValidator())
             case 2:
-                if kumaraInStock >= 0.1 {
+                //can't sell less than 0.1kg of kumara
+                if kumaraInStock >= minKumara {
                     kumaraInStock = sellKumara(
                         currentStock: kumaraInStock, salesHistoryKumara: &salesHistoryKumara,
                         salesHistoryBags: &salesHistoryBags, salesHistoryTotal: &salesHistoryTotal)
@@ -176,13 +259,19 @@ struct SwiftPlayground {
             case 3:
                 print("The current kumara stock is \(kumaraInStock)Kg")
             case 4:
-print(salesHistoryKumara)
-print(salesHistoryBags)
-print(salesHistoryTotal)
+                showSalesHistory(
+                    salesHistoryKumara: salesHistoryKumara, salesHistoryBags: salesHistoryBags,
+                    saleHistoryTotal: salesHistoryTotal)
+            case 5:
+                showSummaryInfo(
+                    salesHistoryKumara: salesHistoryKumara, salesHistoryBags: salesHistoryBags,
+                    salesHistoryTotal: salesHistoryTotal)
+            case 6:
+                print("Goodbye!")
+                return
 
             default:
-                break
-
+                print("Error")
             }
 
         }
