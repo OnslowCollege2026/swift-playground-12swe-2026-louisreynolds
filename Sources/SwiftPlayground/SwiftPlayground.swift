@@ -173,11 +173,11 @@ func showSalesHistory(
         return
     }
 }
-///works out and diplays the summary info
+/// works out and diplays the summary info
 /// parameters
-/// salesHistoryKumara - history of kumara sales
-/// salesHistoryBags -history of bag sales
-/// saleHistoryTotal - history of total transaction of sales
+/// - salesHistoryKumara - history of kumara sales
+/// - salesHistoryBags -history of bag sales
+/// - saleHistoryTotal - history of total transaction of sales
 func showSummaryInfo(
     salesHistoryKumara: [Double], salesHistoryBags: [Int], salesHistoryTotal: [Double]
 ) {
@@ -192,7 +192,7 @@ func showSummaryInfo(
             totalKumara += kumara
         }
 
-        //totals the bags from all sales
+        // totals the bags from all sales
         var totalbags: Int = 0
         for bags in salesHistoryBags {
             totalbags += bags
